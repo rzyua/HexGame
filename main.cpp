@@ -4,10 +4,13 @@
 #include <cstdlib>
 #include <sstream>
 #include "level.hpp"
+#include "entities.hpp"
+#include "exceptions.cpp"
 
 int main()
 {
     srand(time(NULL));
+    sf::Clock clock;
 
     const int tiles[] = { 0, 1,  2,  3,  4,  5,  6,  7,
                           8, 9, 10, 11, 12, 13, 14, 15,
@@ -25,8 +28,16 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "Hex test", sf::Style::Titlebar + sf::Style::Close);
     //window.setVerticalSyncEnabled(true);
 
+    //AnimatedSprite test
+    sf::Texture anim;
+    anim.loadFromFile("textures\\animtest.png");
+    AnimatedSprite animSprite;
+    animSprite.setTexture(anim, sf::Vector2u(64,64), sf::seconds(.1));
+    animSprite.setScale(4,4);
+
     while(window.isOpen())
     {
+        sf::Time elapsed = clock.restart();
         sf::Event event;
         while(window.pollEvent(event))
         {
@@ -49,6 +60,8 @@ int main()
 
         window.clear();
         window.draw(level);
+        animSprite.update(elapsed);
+        window.draw(animSprite);
         window.display();
     }
 }

@@ -44,7 +44,11 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="entities.cpp" />
+		<Unit filename="entities.hpp" />
+		<Unit filename="exceptions.cpp" />
 		<Unit filename="level.cpp" />
+		<Unit filename="level.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
