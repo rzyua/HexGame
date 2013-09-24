@@ -12,6 +12,7 @@ private:
 
 public:
     void setTexture(sf::Texture &texture, sf::Vector2u frameSize, sf::Time frameLength, bool resetRect=false);
+    void setTexture(sf::Texture &texture, sf::Vector2u frameSize, int fps, bool resetRect=false);
     void update(sf::Time elapsed);
     void setFrame(unsigned int frame);
     void setState(unsigned int state);

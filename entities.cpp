@@ -24,14 +24,22 @@ void AnimatedSprite::setTexture(sf::Texture &texture, sf::Vector2u frameSize, sf
     setFrame(s_currentFrame);
 }
 
+void AnimatedSprite::setTexture(sf::Texture &texture, sf::Vector2u frameSize, int fps, bool resetRect)
+{
+    setTexture(texture, frameSize, sf::seconds(1.0/(double)fps), resetRect);
+}
+
 void AnimatedSprite::update(sf::Time elapsed)
 {
+    double frict;
+    double intpart;
+
     //update current frame number
     s_currentFrame += elapsed.asSeconds() / s_frameLength.asSeconds();
 
-    //make sure frame number is not out of bounds
-    if(s_currentFrame >= (double)s_frames)
-        s_currentFrame -= (double)s_frames;
+    //make sure the frame is not out of range
+    frict = modf(s_currentFrame, &intpart);
+    s_currentFrame=double((int)intpart % s_frames)+frict;
 
     std::cout<<"Frame: "<<s_currentFrame+1<<"/"<<s_frames<<std::endl;
     std::cout<<"State: "<<s_currentState+1<<"/"<<s_states<<std::endl;

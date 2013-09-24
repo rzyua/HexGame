@@ -26,13 +26,13 @@ int main()
     level.load(tiles, 8, 8);
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Hex test", sf::Style::Titlebar + sf::Style::Close);
-    //window.setVerticalSyncEnabled(true);
+    window.setVerticalSyncEnabled(true);
 
     //AnimatedSprite test
     sf::Texture anim;
     anim.loadFromFile("textures\\animtest.png");
     AnimatedSprite animSprite;
-    animSprite.setTexture(anim, sf::Vector2u(64,64), sf::seconds(.1));
+    animSprite.setTexture(anim, sf::Vector2u(64,64), 20);
     animSprite.setScale(4,4);
 
     while(window.isOpen())
