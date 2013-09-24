@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include "entities.hpp"
-#include "exceptions.cpp"
+#include "exceptions.hpp"
 
 void AnimatedSprite::setTexture(sf::Texture &texture, sf::Vector2u frameSize, sf::Time frameLength, bool resetRect)
 {

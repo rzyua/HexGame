@@ -5,7 +5,7 @@
 #include <sstream>
 #include "level.hpp"
 #include "entities.hpp"
-#include "exceptions.cpp"
+#include "exceptions.hpp"
 
 int main()
 {
