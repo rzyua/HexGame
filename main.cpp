@@ -41,6 +41,7 @@ int main()
     AnimatedSprite animSprite;
     animSprite.setTexture(anim, sf::Vector2u(64, 64), 16);
     animSprite.setScale(2,2);
+    sf::Vector2f destination(0,0);
 
     //Highlight
     sf::Texture highlight_texture;
@@ -79,21 +80,22 @@ int main()
                     window.close();
                 break;
 
-            case sf::Event::MouseButtonReleased:
+            case sf::Event::MouseButtonPressed:
                 switch (event.mouseButton.button)
                 {
                 case sf::Mouse::Left:
                     selectedTiles.clear();
-                    level.selectHexRadius(currentHex,
-                                          selectedTiles, 2);
+                    level.selectHexRadius(currentHex, selectedTiles, 0);
                     break;
 
                 case sf::Mouse::Right:
                     selectedTiles.clear();
+                    level.selectHexRadius(currentHex, selectedTiles, 1);
                     break;
 
                 default:
-                    std::cout<<"Mouse button: "<<event.mouseButton.button<<std::endl;
+                    selectedTiles.clear();
+                    level.selectHexRadius(currentHex, selectedTiles, event.mouseButton.button);
                 }
                 break;
 
@@ -104,28 +106,29 @@ int main()
 
         //Handle keyboard input
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)
-            || mousePosition.x >= window.getSize().x - 1)
+            || mousePosition.x == window.getSize().x - 1)
         {
             offset.x += SCROLL_SPEED * elapsed.asSeconds();
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)
-            || mousePosition.x <= 0)
+            || mousePosition.x == 0)
         {
             offset.x -= SCROLL_SPEED * elapsed.asSeconds();
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)
-            || mousePosition.y >= window.getSize().y - 1)
+            || mousePosition.y == window.getSize().y - 1)
         {
             offset.y += SCROLL_SPEED * elapsed.asSeconds();
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)
-            || mousePosition.y <= 0)
+            || mousePosition.y == 0)
         {
             offset.y -= SCROLL_SPEED * elapsed.asSeconds();
         }
 
         //Speed up scrolling when shift is pressed
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)
+           || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
         {
             offset.x *= 2;
             offset.y *= 2;
@@ -148,9 +151,25 @@ int main()
         }
         //Animation test
         {
+            destination = mouseCoords;
             animSprite.update(elapsed);
-            animSprite.setPosition(animSprite.getPosition().x + (60.0 * elapsed.asSeconds()),
-                                   animSprite.getPosition().y + (21.0 * elapsed.asSeconds()));
+            const float SPEED = 60;
+
+            sf::Vector2f currentPos(animSprite.getPosition().x + 64, animSprite.getPosition().y + 126);
+            sf::Vector2f delta(0,0);
+
+            if(currentPos.x > destination.x && currentPos.x - (SPEED * elapsed.asSeconds()) > destination.x)
+                delta.x = -1 * (elapsed.asSeconds() * SPEED);
+            if(currentPos.x < destination.x && currentPos.x + (SPEED * elapsed.asSeconds()) < destination.x)
+                delta.x = elapsed.asSeconds() * SPEED;
+
+            if(currentPos.y > destination.y && currentPos.y - (SPEED * elapsed.asSeconds()) > destination.y)
+                delta.y = -1 * (elapsed.asSeconds() * SPEED);
+            if(currentPos.y < destination.y && currentPos.y + (SPEED * elapsed.asSeconds()) < destination.y)
+                delta.y = elapsed.asSeconds() * SPEED;
+
+            animSprite.setPosition(animSprite.getPosition().x + delta.x,
+                                   animSprite.getPosition().y + delta.y);
             window.draw(animSprite);
         }
         window.display();
