@@ -1,6 +1,7 @@
 #include <SFML\Graphics.hpp>
 #include "level.hpp"
 #include <iostream>
+#include <iterator>
 #include <cmath>
 #include <cstdlib>
 #include <sstream>
@@ -182,56 +183,56 @@ sf::Vector2f HexMap::getHexCoords (sf::Vector2u hexAddress) const
     return sf::Vector2f(hexAddress.x * m_hexShift.x, (hexAddress.y * m_hexShift.y * 2) + shift);
 }
 
-bool HexMap::selectHexNeighbours (sf::Vector2u hexAddress, std::vector<sf::Vector2u>& neighbours, bool includeCenter) const
+bool HexMap::selectHexNeighbours (sf::Vector2u hexAddress, std::forward_list<sf::Vector2u> &neighbours, bool includeCenter) const
 {
     //TODO: rewrite in a more generic and unspaghettified code
-    if (neighbours.size() > 0)
+    if (!neighbours.empty())
         return false;
     else
     {
         if (includeCenter)
         {
-            neighbours.push_back(hexAddress);
+            neighbours.push_front(hexAddress);
         }
 
         if ((int)hexAddress.y - 1 >= 0)
-            neighbours.push_back(sf::Vector2u(hexAddress.x, hexAddress.y - 1));
+            neighbours.push_front(sf::Vector2u(hexAddress.x, hexAddress.y - 1));
 
         if (hexAddress.y + 1 < m_height)
-            neighbours.push_back(sf::Vector2u(hexAddress.x, hexAddress.y + 1));
+            neighbours.push_front(sf::Vector2u(hexAddress.x, hexAddress.y + 1));
 
         if (hexAddress.x % 2 == 0)
         {
             if((int)hexAddress.x - 1 >= 0)
             {
                 if ((int)hexAddress.y - 1 >= 0)
-                    neighbours.push_back(sf::Vector2u(hexAddress.x - 1, hexAddress.y - 1));
+                    neighbours.push_front(sf::Vector2u(hexAddress.x - 1, hexAddress.y - 1));
 
-                neighbours.push_back(sf::Vector2u(hexAddress.x - 1, hexAddress.y));
+                neighbours.push_front(sf::Vector2u(hexAddress.x - 1, hexAddress.y));
             }
 
             if ((int)hexAddress.y - 1 >= 0 && hexAddress.x + 1 < m_width)
-                neighbours.push_back(sf::Vector2u(hexAddress.x + 1, hexAddress.y - 1));
+                neighbours.push_front(sf::Vector2u(hexAddress.x + 1, hexAddress.y - 1));
 
             if (hexAddress.x + 1 < m_width)
-                neighbours.push_back(sf::Vector2u(hexAddress.x + 1, hexAddress.y));
+                neighbours.push_front(sf::Vector2u(hexAddress.x + 1, hexAddress.y));
         }
         else
         {
             if((int)hexAddress.x - 1 >= 0)
             {
-                neighbours.push_back(sf::Vector2u(hexAddress.x - 1, hexAddress.y));
+                neighbours.push_front(sf::Vector2u(hexAddress.x - 1, hexAddress.y));
 
                 if (hexAddress.y + 1 < m_height)
-                    neighbours.push_back(sf::Vector2u(hexAddress.x - 1, hexAddress.y + 1));
+                    neighbours.push_front(sf::Vector2u(hexAddress.x - 1, hexAddress.y + 1));
             }
 
             if (hexAddress.x + 1 < m_width)
             {
-                neighbours.push_back(sf::Vector2u(hexAddress.x + 1, hexAddress.y));
+                neighbours.push_front(sf::Vector2u(hexAddress.x + 1, hexAddress.y));
 
                 if (hexAddress.y + 1 < m_height)
-                    neighbours.push_back(sf::Vector2u(hexAddress.x + 1, hexAddress.y + 1));
+                    neighbours.push_front(sf::Vector2u(hexAddress.x + 1, hexAddress.y + 1));
             }
         }
 

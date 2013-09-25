@@ -1,3 +1,5 @@
+#include <forward_list>
+
 class HexMap : public sf::Drawable, public sf::Transformable
 {
 protected:
@@ -20,6 +22,6 @@ public:
     sf::Vector2u getHexAddress(sf::Vector2i point) const;
     sf::Vector2u getHexAddress (sf::Vector2f point) const;
     sf::Vector2f getHexCoords (sf::Vector2u hexAddress) const;
-    bool selectHexNeighbours (sf::Vector2u hexAddress, std::vector<sf::Vector2u>& neighbours, bool includeCenter = true) const;
+    bool selectHexNeighbours (sf::Vector2u hexAddress, std::forward_list<sf::Vector2u> &neighbours, bool includeCenter = true) const;
 };
 
