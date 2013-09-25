@@ -4,7 +4,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <sstream>
-#include "exceptions.cpp"
+#include "exceptions.hpp"
 
 void HexMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

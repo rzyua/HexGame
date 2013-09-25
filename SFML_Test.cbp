@@ -13,13 +13,13 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add directory="D:/SDK/SFML-2.1/include" />
+					<Add directory="includes/SFML-2.1/include" />
 				</Compiler>
 				<Linker>
 					<Add library="sfml-graphics-d" />
 					<Add library="sfml-window-d" />
 					<Add library="sfml-system-d" />
-					<Add directory="D:/SDK/SFML-2.1/lib" />
+					<Add directory="includes/SFML-2.1/lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -29,14 +29,14 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
-					<Add directory="D:/SDK/SFML-2.1/include" />
+					<Add directory="includes/SFML-2.1/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add library="sfml-graphics" />
 					<Add library="sfml-window" />
 					<Add library="sfml-system" />
-					<Add directory="D:/SDK/SFML-2.1/lib" />
+					<Add directory="includes/SFML-2.1/lib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -46,7 +46,7 @@
 		</Compiler>
 		<Unit filename="entities.cpp" />
 		<Unit filename="entities.hpp" />
-		<Unit filename="exceptions.cpp" />
+		<Unit filename="exceptions.hpp" />
 		<Unit filename="level.cpp" />
 		<Unit filename="level.hpp" />
 		<Unit filename="main.cpp" />
