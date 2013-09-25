@@ -41,9 +41,6 @@ void AnimatedSprite::update(sf::Time elapsed)
     frict = modf(s_currentFrame, &intpart);
     s_currentFrame=double((int)intpart % s_frames)+frict;
 
-    std::cout<<"Frame: "<<s_currentFrame+1<<"/"<<s_frames<<std::endl;
-    std::cout<<"State: "<<s_currentState+1<<"/"<<s_states<<std::endl;
-
     //set the texture rect
     updateRect();
 }
