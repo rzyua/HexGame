@@ -11,22 +11,20 @@ int main()
 {
     srand(time(NULL));
     sf::Clock clock;
-
-    const int tiles[] = { 0, 1,  2,  3,  4,  5,  6,  7,
-                          8, 9, 10, 11, 12, 13, 14, 15,
-                          0, 1,  2,  3,  4,  5,  6,  7,
-                          8, 9, 10, 11, 12, 13, 14, 15,
-                          0, 1,  2,  3,  4,  5,  6,  7,
-                          8, 9, 10, 11, 12, 13, 14, 15,
-                          0, 1,  2,  3,  4,  5,  6,  7,
-                          8, 9, 10, 11, 12, 13, 14, 15,
-                        };
     //pixels per second
-    const double SCROLL_SPEED = 300;
+    const double SCROLL_SPEED = 1000;
+    const unsigned int LEVEL_WIDTH = 24;
+    const unsigned int LEVEL_HEIGHT = 32;
 
+    //placeholder level generation
+    int tiles[LEVEL_WIDTH*LEVEL_HEIGHT];\
+    for(int i = 0; i < LEVEL_WIDTH*LEVEL_HEIGHT; ++i)
+    {
+        tiles[i] = rand()%16;
+    }
 
     HexMap level("textures\\hexmap.png");
-    level.load(tiles, 8, 8);
+    level.load(tiles, LEVEL_WIDTH, LEVEL_HEIGHT);
 
     //Create the window and view
     sf::RenderWindow window(sf::VideoMode(800, 600), "Hex test", sf::Style::Titlebar + sf::Style::Close);
@@ -37,7 +35,7 @@ int main()
     sf::Texture anim;
     anim.loadFromFile("textures\\animtest.png");
     AnimatedSprite animSprite;
-    animSprite.setTexture(anim, sf::Vector2u(64,64), 20);
+    animSprite.setTexture(anim, sf::Vector2u(64, 64), 16);
     animSprite.setScale(2,2);
 
     //Highlight
@@ -112,7 +110,7 @@ int main()
         //Highlight field
         highlight.setPosition(level.getHexCoords(level.getHexAddress(window.mapPixelToCoords(sf::Mouse::getPosition(window)))));
 
-        level.updateHex(sf::Vector2u(rand()%8,rand()%8), 7);
+        level.updateHex(sf::Vector2u(rand()%LEVEL_WIDTH,rand()%LEVEL_HEIGHT), 7);
 
         window.clear();
         window.setView(levelView);
@@ -123,8 +121,12 @@ int main()
             highlight.setPosition(level.getHexCoords(selectedTiles[i]));
             window.draw(highlight);
         }
-        animSprite.update(elapsed);
-        window.draw(animSprite);
+        //Animation test
+        {
+            animSprite.update(elapsed);
+            animSprite.setPosition(animSprite.getPosition().x + (60.0 * elapsed.asSeconds()), animSprite.getPosition().y + (21.0 * elapsed.asSeconds()));
+            window.draw(animSprite);
+        }
         window.display();
     }
 }
