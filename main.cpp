@@ -14,7 +14,7 @@ int main()
     srand(time(NULL));
     sf::Clock clock;
     //pixels per second
-    const double SCROLL_SPEED = 1000;
+    const float SCROLL_SPEED = 1400;
     const unsigned int LEVEL_WIDTH = 24;
     const unsigned int LEVEL_HEIGHT = 32;
 
@@ -29,8 +29,9 @@ int main()
     level.load(tiles, LEVEL_WIDTH, LEVEL_HEIGHT);
 
     //Create the window and view
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Hex test", sf::Style::Titlebar + sf::Style::Close);
-    //sf::RenderWindow window(sf::VideoMode(1920, 1080), "Hex test", sf::Style::None);0    window.setPosition(sf::Vector2i(o,0));
+    //sf::RenderWindow window(sf::VideoMode(960, 540), "Hex test", sf::Style::Titlebar + sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(1366,768), "Hex test", sf::Style::Fullscreen);
+    window.setPosition(sf::Vector2i(0,0));
     window.setVerticalSyncEnabled(true);
     sf::View levelView = window.getDefaultView();
 
@@ -52,8 +53,12 @@ int main()
         //Restart clock and get time elapsed from previous frame
         const sf::Time elapsed = clock.restart();
 
-        //Get mouse position
+        //Get mouse position and corresponding pixel coords
         const sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+        const sf::Vector2f mouseCoords = window.mapPixelToCoords(mousePosition);
+        //Get current hex position and coords
+        const sf::Vector2u currentHex = level.getHexAddress(mouseCoords);
+        const sf::Vector2f currentHexCoords = level.getHexCoords(currentHex);
 
         //View offset
         sf::Vector2f offset(0,0);
@@ -79,7 +84,8 @@ int main()
                 {
                 case sf::Mouse::Left:
                     selectedTiles.clear();
-                    level.selectHexNeighbours(level.getHexAddress(window.mapPixelToCoords(sf::Mouse::getPosition(window))), selectedTiles);
+                    level.selectHexRadius(currentHex,
+                                          selectedTiles, 2);
                     break;
 
                 case sf::Mouse::Right:
@@ -97,24 +103,25 @@ int main()
         }
 
         //Handle keyboard input
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)
+            || mousePosition.x >= window.getSize().x - 1)
         {
-            offset.x += SCROLL_SPEED*elapsed.asSeconds();
+            offset.x += SCROLL_SPEED * elapsed.asSeconds();
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)
+            || mousePosition.x <= 0)
         {
-
-            offset.x -= SCROLL_SPEED*elapsed.asSeconds();
+            offset.x -= SCROLL_SPEED * elapsed.asSeconds();
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)
+            || mousePosition.y >= window.getSize().y - 1)
         {
-
-            offset.y += SCROLL_SPEED*elapsed.asSeconds();
+            offset.y += SCROLL_SPEED * elapsed.asSeconds();
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)
+            || mousePosition.y <= 0)
         {
-
-            offset.y -= SCROLL_SPEED*elapsed.asSeconds();
+            offset.y -= SCROLL_SPEED * elapsed.asSeconds();
         }
 
         //Speed up scrolling when shift is pressed
@@ -128,7 +135,7 @@ int main()
         levelView.move(offset);
 
         //Highlight field
-        highlight.setPosition(level.getHexCoords(level.getHexAddress(window.mapPixelToCoords(sf::Mouse::getPosition(window)))));
+        highlight.setPosition(currentHexCoords);
 
         window.clear();
         window.setView(levelView);
@@ -142,7 +149,8 @@ int main()
         //Animation test
         {
             animSprite.update(elapsed);
-            animSprite.setPosition(animSprite.getPosition().x + (60.0 * elapsed.asSeconds()), animSprite.getPosition().y + (21.0 * elapsed.asSeconds()));
+            animSprite.setPosition(animSprite.getPosition().x + (60.0 * elapsed.asSeconds()),
+                                   animSprite.getPosition().y + (21.0 * elapsed.asSeconds()));
             window.draw(animSprite);
         }
         window.display();

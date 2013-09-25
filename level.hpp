@@ -2,7 +2,7 @@
 
 class HexMap : public sf::Drawable, public sf::Transformable
 {
-protected:
+private:
     sf::Image collisionMap;
     bool initialized;
     sf::VertexArray m_vertices;
@@ -13,6 +13,8 @@ protected:
     unsigned int m_height;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    //helper methor for selexHexRadius validating whether hexes havepositive coordinates
+    bool addHex(int x, int y, std::forward_list<sf::Vector2u>& hexes) const;
 
 public:
     HexMap(const std::string& tileset);
@@ -22,6 +24,7 @@ public:
     sf::Vector2u getHexAddress(sf::Vector2i point) const;
     sf::Vector2u getHexAddress (sf::Vector2f point) const;
     sf::Vector2f getHexCoords (sf::Vector2u hexAddress) const;
-    bool selectHexNeighbours (sf::Vector2u hexAddress, std::forward_list<sf::Vector2u> &neighbours, bool includeCenter = true) const;
+    bool selectHexRadius (sf::Vector2u hexAddress, std::forward_list<sf::Vector2u>& hexes,
+                          unsigned int radius = 1, bool includeCenter = true) const;
 };
 

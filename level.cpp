@@ -183,59 +183,45 @@ sf::Vector2f HexMap::getHexCoords (sf::Vector2u hexAddress) const
     return sf::Vector2f(hexAddress.x * m_hexShift.x, (hexAddress.y * m_hexShift.y * 2) + shift);
 }
 
-bool HexMap::selectHexNeighbours (sf::Vector2u hexAddress, std::forward_list<sf::Vector2u> &neighbours, bool includeCenter) const
+bool HexMap::selectHexRadius(sf::Vector2u hexAddress, std::forward_list<sf::Vector2u>& hexes,
+                             unsigned int radius, bool includeCenter) const
 {
-    //TODO: rewrite in a more generic and unspaghettified code
-    if (!neighbours.empty())
+    if (!hexes.empty())
         return false;
-    else
+
+    int minY = (int)hexAddress.y - (int)radius;
+    int maxY = (int)hexAddress.y + (int)radius;
+
+    //add the vertical line
+    for(int y = minY; y <= maxY; ++y)
     {
-        if (includeCenter)
-        {
-            neighbours.push_front(hexAddress);
-        }
-
-        if ((int)hexAddress.y - 1 >= 0)
-            neighbours.push_front(sf::Vector2u(hexAddress.x, hexAddress.y - 1));
-
-        if (hexAddress.y + 1 < m_height)
-            neighbours.push_front(sf::Vector2u(hexAddress.x, hexAddress.y + 1));
-
-        if (hexAddress.x % 2 == 0)
-        {
-            if((int)hexAddress.x - 1 >= 0)
-            {
-                if ((int)hexAddress.y - 1 >= 0)
-                    neighbours.push_front(sf::Vector2u(hexAddress.x - 1, hexAddress.y - 1));
-
-                neighbours.push_front(sf::Vector2u(hexAddress.x - 1, hexAddress.y));
-            }
-
-            if ((int)hexAddress.y - 1 >= 0 && hexAddress.x + 1 < m_width)
-                neighbours.push_front(sf::Vector2u(hexAddress.x + 1, hexAddress.y - 1));
-
-            if (hexAddress.x + 1 < m_width)
-                neighbours.push_front(sf::Vector2u(hexAddress.x + 1, hexAddress.y));
-        }
-        else
-        {
-            if((int)hexAddress.x - 1 >= 0)
-            {
-                neighbours.push_front(sf::Vector2u(hexAddress.x - 1, hexAddress.y));
-
-                if (hexAddress.y + 1 < m_height)
-                    neighbours.push_front(sf::Vector2u(hexAddress.x - 1, hexAddress.y + 1));
-            }
-
-            if (hexAddress.x + 1 < m_width)
-            {
-                neighbours.push_front(sf::Vector2u(hexAddress.x + 1, hexAddress.y));
-
-                if (hexAddress.y + 1 < m_height)
-                    neighbours.push_front(sf::Vector2u(hexAddress.x + 1, hexAddress.y + 1));
-            }
-        }
-
-        return true;
+        if(includeCenter || y != hexAddress.y)
+            addHex(hexAddress.x, y, hexes);
     }
+
+    for(int offset = 1; offset <= radius; ++offset)
+    {
+        if((hexAddress.x + offset)%2 == 1)
+            --maxY;
+        else
+            ++minY;
+        for(int y = minY; y <= maxY; ++y)
+        {
+            addHex(hexAddress.x + offset , y, hexes);
+            addHex((int)hexAddress.x - offset , y, hexes);
+        }
+    }
+
+    return true;
+}
+
+bool HexMap::addHex(int x, int y, std::forward_list<sf::Vector2u>& hexes) const
+{
+    if(x < 0 || y < 0 || x >= m_width || y >= m_height)
+    {
+        return false;
+    }
+
+    hexes.push_front(sf::Vector2u(x, y));
+    return true;
 }
