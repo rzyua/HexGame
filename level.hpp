@@ -20,6 +20,6 @@ public:
     sf::Vector2u getHexAddress(sf::Vector2i point) const;
     sf::Vector2u getHexAddress (sf::Vector2f point) const;
     sf::Vector2f getHexCoords (sf::Vector2u hexAddress) const;
-    bool selectHexNeighbours (sf::Vector2u hexAddress, std::vector<sf::Vector2u>& neighbours) const;
+    bool selectHexNeighbours (sf::Vector2u hexAddress, std::vector<sf::Vector2u>& neighbours, bool includeCenter = true) const;
 };
 

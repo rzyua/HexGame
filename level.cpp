@@ -182,13 +182,18 @@ sf::Vector2f HexMap::getHexCoords (sf::Vector2u hexAddress) const
     return sf::Vector2f(hexAddress.x * m_hexShift.x, (hexAddress.y * m_hexShift.y * 2) + shift);
 }
 
-bool HexMap::selectHexNeighbours (sf::Vector2u hexAddress, std::vector<sf::Vector2u>& neighbours) const
+bool HexMap::selectHexNeighbours (sf::Vector2u hexAddress, std::vector<sf::Vector2u>& neighbours, bool includeCenter) const
 {
     //TODO: rewrite in a more generic and unspaghettified code
     if (neighbours.size() > 0)
         return false;
     else
     {
+        if (includeCenter)
+        {
+            neighbours.push_back(hexAddress);
+        }
+
         if ((int)hexAddress.y - 1 >= 0)
             neighbours.push_back(sf::Vector2u(hexAddress.x, hexAddress.y - 1));
 

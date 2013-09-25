@@ -28,6 +28,8 @@ int main()
 
     //Create the window and view
     sf::RenderWindow window(sf::VideoMode(800, 600), "Hex test", sf::Style::Titlebar + sf::Style::Close);
+    //sf::RenderWindow window(sf::VideoMode(1920, 1080), "Hex test", sf::Style::None);
+    window.setPosition(sf::Vector2i(1920,0));
     window.setVerticalSyncEnabled(true);
     sf::View levelView = window.getDefaultView();
 
@@ -69,7 +71,6 @@ int main()
                 {
                     selectedTiles.clear();
                     level.selectHexNeighbours(level.getHexAddress(window.mapPixelToCoords(sf::Mouse::getPosition(window))), selectedTiles);
-                    selectedTiles.push_back(level.getHexAddress(window.mapPixelToCoords(sf::Mouse::getPosition(window))));
                 }
                 else if (event.mouseButton.button == sf::Mouse::Right)
                 {
