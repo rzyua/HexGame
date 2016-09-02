@@ -1,4 +1,4 @@
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "level.hpp"
 #include <iostream>
 #include <iterator>
@@ -23,7 +23,7 @@ initialized(false)
     // load the tileset texture
     m_tileset.loadFromFile(tileset);
     // Load the collision map
-    collisionMap.loadFromFile("data\\collisionmap.png");
+    collisionMap.loadFromFile("data/collisionmap.png");
 }
 
 bool HexMap::load(const int* tiles, unsigned int width, unsigned int height)

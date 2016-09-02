@@ -1,4 +1,4 @@
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <forward_list>
 #include <iterator>
@@ -25,19 +25,19 @@ int main()
         tiles[i] = rand()%16;
     }
 
-    HexMap level("textures\\hexmap.png");
+    HexMap level("textures/hexmap.png");
     level.load(tiles, LEVEL_WIDTH, LEVEL_HEIGHT);
 
     //Create the window and view
-    //sf::RenderWindow window(sf::VideoMode(960, 540), "Hex test", sf::Style::Titlebar + sf::Style::Close);
-    sf::RenderWindow window(sf::VideoMode(1366,768), "Hex test", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode(960, 540), "Hex test", sf::Style::Titlebar + sf::Style::Close);
+    //sf::RenderWindow window(sf::VideoMode(1920,1080), "Hex test", sf::Style::Fullscreen);
     window.setPosition(sf::Vector2i(0,0));
     window.setVerticalSyncEnabled(true);
     sf::View levelView = window.getDefaultView();
 
     //AnimatedSprite test
     sf::Texture anim;
-    anim.loadFromFile("textures\\animtest.png");
+    anim.loadFromFile("textures/animtest.png");
     AnimatedSprite animSprite;
     animSprite.setTexture(anim, sf::Vector2u(64, 64), 16);
     animSprite.setScale(2,2);
@@ -45,7 +45,7 @@ int main()
 
     //Highlight
     sf::Texture highlight_texture;
-    highlight_texture.loadFromFile("textures\\highlight.png");
+    highlight_texture.loadFromFile("textures/highlight.png");
     sf::Sprite highlight(highlight_texture);
     std::forward_list<sf::Vector2u> selectedTiles;
 
